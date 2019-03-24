@@ -22,6 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
+   return new Date(value);
    throw new Error('Not implemented');
 }
 
@@ -37,6 +38,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
+   return new Date(value);
    throw new Error('Not implemented');
 }
 
@@ -56,6 +58,17 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
+   let year = date.getFullYear();
+   if (year % 4 != 0)
+      return false;
+   else
+      if (year %100 != 0)
+         return true;
+      else
+         if  (year %400 != 0)
+            return false;
+         else
+            return true; 
    throw new Error('Not implemented');
 }
 
@@ -76,6 +89,23 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
+  var time1 = new Date(startDate);
+  var time2 = new Date(endDate);
+  var hour = time2.getHours()- time1.getHours();
+  var minute = time2.getMinutes()-time1.getMinutes();
+  var second = time2.getSeconds()-time1.getSeconds();
+  var millisecond = time2.getMilliseconds()-time1.getMilliseconds();
+  var temp = ((hour < 10) ? '0' : '') +hour;
+  temp += ((minute < 10) ? ':0' : ':') + minute;
+  temp += ((second < 10) ? ':0' : ':') + second;
+  if (millisecond<10)
+      temp += '.00' + millisecond;
+   else
+      if ((millisecond>9)&&(millisecond<100))
+         temp += '.0' + millisecond;
+      else
+      temp += '.' + millisecond;
+  return temp;
    throw new Error('Not implemented');
 }
 
@@ -94,6 +124,15 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
+   var time = new Date(date);
+   var hour = time.getUTCHours();
+   var minute = time.getUTCMinutes();
+   let a =Math.abs(0.5* (60 * hour - 11 * minute));
+   while (a>=360)
+   a-=360;
+   if (a> 180)
+      a = 360 -a;
+   return Math.abs(a/180*Math.PI);
     throw new Error('Not implemented');
 }
 
